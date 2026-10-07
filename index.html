@@ -68,7 +68,7 @@ body {
     align-items: center;
     justify-content: center;
 
-    transition: transform 0.45s ease;
+    transition: transform 0.35s ease;
 }
 
 #book {
@@ -112,14 +112,6 @@ body {
    REALISTIC CENTER BINDING
 ========================= */
 
-/*
-   This is NOT permanently visible.
-
-   JavaScript only turns it on when
-   the book is resting on an interior
-   two-page spread.
-*/
-
 .binding {
     position: absolute;
 
@@ -142,10 +134,7 @@ body {
 }
 
 
-/*
-   LEFT PAGE:
-   subtle shadow approaching gutter
-*/
+/* LEFT SIDE SHADOW */
 
 .binding::before {
     content: "";
@@ -170,10 +159,7 @@ body {
 }
 
 
-/*
-   RIGHT PAGE:
-   matching gutter shadow
-*/
+/* RIGHT SIDE SHADOW */
 
 .binding::after {
     content: "";
@@ -198,9 +184,7 @@ body {
 }
 
 
-/*
-   VERY THIN PHYSICAL CREASE
-*/
+/* CENTER CREASE */
 
 .binding-line {
     position: absolute;
@@ -214,8 +198,7 @@ body {
 
     transform: translateX(-50%);
 
-    background:
-        rgba(0,0,0,.28);
+    background: rgba(0,0,0,.28);
 
     box-shadow:
         -1px 0 1px rgba(0,0,0,.08),
@@ -223,12 +206,6 @@ body {
 
     z-index: 2;
 }
-
-
-/*
-   Only applied when book
-   is sitting open.
-*/
 
 .binding.visible {
     opacity: 1;
@@ -246,18 +223,18 @@ body {
 
     transform: translateY(-50%);
 
-    width: 54px;
-    height: 54px;
+    width: 64px;
+    height: 64px;
 
     border-radius: 50%;
 
     border: 1px solid #bdbdbd;
 
-    background: rgba(255,255,255,.96);
+    background: rgba(255,255,255,.97);
 
     color: #222;
 
-    font-size: 32px;
+    font-size: 39px;
     font-weight: 300;
 
     display: flex;
@@ -269,7 +246,7 @@ body {
     z-index: 1000;
 
     box-shadow:
-        0 2px 8px rgba(0,0,0,.08);
+        0 3px 10px rgba(0,0,0,.10);
 
     transition:
         transform .15s ease,
@@ -346,10 +323,10 @@ body {
 
         transform: none;
 
-        width: 44px;
-        height: 44px;
+        width: 48px;
+        height: 48px;
 
-        font-size: 27px;
+        font-size: 30px;
     }
 
     .arrow:hover {
@@ -418,12 +395,6 @@ body {
             </div>
 
 
-            <!--
-                Dynamic center gutter.
-                It sits at the exact center
-                of the open two-page spread.
-            -->
-
             <div
                 id="binding"
                 class="binding"
@@ -484,30 +455,22 @@ body {
 
 function calculatePageSize() {
 
-    const ratio =
-        11 / 8.5;
-
+    const ratio = 11 / 8.5;
 
     const availableWidth =
         window.innerWidth - 190;
 
-
     const availableHeight =
         window.innerHeight - 100;
 
-
     let pageWidth =
         availableWidth / 2;
-
 
     let pageHeight =
         pageWidth / ratio;
 
 
-    if (
-        pageHeight >
-        availableHeight
-    ) {
+    if (pageHeight > availableHeight) {
 
         pageHeight =
             availableHeight;
@@ -596,9 +559,7 @@ const pageFlip =
 
 
 pageFlip.loadFromHTML(
-    document.querySelectorAll(
-        ".page"
-    )
+    document.querySelectorAll(".page")
 );
 
 
@@ -608,39 +569,22 @@ pageFlip.loadFromHTML(
 ============================== */
 
 const prev =
-    document.getElementById(
-        "prev"
-    );
-
+    document.getElementById("prev");
 
 const next =
-    document.getElementById(
-        "next"
-    );
-
+    document.getElementById("next");
 
 const counter =
-    document.getElementById(
-        "counter"
-    );
-
+    document.getElementById("counter");
 
 const positioner =
-    document.getElementById(
-        "book-positioner"
-    );
-
+    document.getElementById("book-positioner");
 
 const binding =
-    document.getElementById(
-        "binding"
-    );
-
+    document.getElementById("binding");
 
 const pageSound =
-    document.getElementById(
-        "pageSound"
-    );
+    document.getElementById("pageSound");
 
 
 
@@ -658,15 +602,10 @@ function playPageSound() {
 
         pageSound.volume = 0.35;
 
-
         const playPromise =
             pageSound.play();
 
-
-        if (
-            playPromise !==
-            undefined
-        ) {
+        if (playPromise !== undefined) {
 
             playPromise.catch(
                 () => {}
@@ -683,33 +622,31 @@ function playPageSound() {
 
 
 /* ==============================
-   COVER / SPREAD POSITION
+   RESTING BOOK POSITION
 ============================== */
 
-function positionBook(index) {
+function positionBook(index, animate = true) {
 
     const total =
         pageFlip.getPageCount();
+
+
+    positioner.style.transition =
+        animate
+        ? "transform 0.35s ease"
+        : "none";
 
 
     /*
        FRONT COVER
     */
 
-    if (
-        index === 0
-    ) {
+    if (index === 0) {
 
         positioner.style.transform =
             "translateX(-" +
             (pageSize.width / 2) +
             "px)";
-
-
-        /*
-           No binding on a
-           single cover.
-        */
 
         binding.classList.remove(
             "visible"
@@ -722,16 +659,12 @@ function positionBook(index) {
        BACK COVER
     */
 
-    else if (
-        index >=
-        total - 1
-    ) {
+    else if (index >= total - 1) {
 
         positioner.style.transform =
             "translateX(" +
             (pageSize.width / 2) +
             "px)";
-
 
         binding.classList.remove(
             "visible"
@@ -748,7 +681,6 @@ function positionBook(index) {
 
         positioner.style.transform =
             "translateX(0px)";
-
 
         binding.classList.add(
             "visible"
@@ -769,7 +701,6 @@ function updateUI(index) {
     const total =
         pageFlip.getPageCount();
 
-
     const current =
         index + 1;
 
@@ -780,7 +711,12 @@ function updateUI(index) {
         total;
 
 
-    positionBook(index);
+    /*
+       Restore correct resting
+       position after page turn.
+    */
+
+    positionBook(index, true);
 
 
     prev.style.opacity =
@@ -799,27 +735,17 @@ function updateUI(index) {
 
 
 /* ==============================
-   PAGE STARTS TURNING
+   PAGE STARTS MOVING
 ============================== */
 
 pageFlip.on(
     "changeState",
     e => {
 
-        if (
-            e.data ===
-            "flipping"
-        ) {
+        if (e.data === "flipping") {
 
             /*
-               IMPORTANT:
-
-               Remove our stationary
-               gutter immediately.
-
-               StPageFlip's own dynamic
-               shadows now handle the
-               moving page.
+               Hide stationary gutter.
             */
 
             binding.classList.remove(
@@ -828,8 +754,27 @@ pageFlip.on(
 
 
             /*
-               Start sound at beginning
-               of page movement.
+               CRITICAL FIX:
+
+               While StPageFlip is actually
+               animating, remove our custom
+               cover translation.
+
+               This lets StPageFlip animate
+               the cover using its normal
+               geometry instead of flipping
+               a translated book.
+            */
+
+            positioner.style.transition =
+                "none";
+
+            positioner.style.transform =
+                "translateX(0px)";
+
+
+            /*
+               Start sound immediately.
             */
 
             playPageSound();
@@ -842,7 +787,7 @@ pageFlip.on(
 
 
 /* ==============================
-   PAGE FINISHED TURNING
+   PAGE TURN COMPLETED
 ============================== */
 
 pageFlip.on(
@@ -850,13 +795,23 @@ pageFlip.on(
     e => {
 
         /*
-           Update cover position,
-           counter and restore the
-           binding when appropriate.
+           Let StPageFlip finish its
+           animation before restoring
+           our custom resting position.
         */
 
-        updateUI(
-            e.data
+        requestAnimationFrame(
+            () => {
+
+                requestAnimationFrame(
+                    () => {
+
+                        updateUI(e.data);
+
+                    }
+                );
+
+            }
         );
 
     }
@@ -865,7 +820,7 @@ pageFlip.on(
 
 
 /* ==============================
-   BUTTONS
+   NAVIGATION BUTTONS
 ============================== */
 
 prev.addEventListener(
@@ -890,27 +845,21 @@ next.addEventListener(
 
 
 /* ==============================
-   KEYBOARD
+   KEYBOARD NAVIGATION
 ============================== */
 
 document.addEventListener(
     "keydown",
     e => {
 
-        if (
-            e.key ===
-            "ArrowLeft"
-        ) {
+        if (e.key === "ArrowLeft") {
 
             pageFlip.flipPrev();
 
         }
 
 
-        if (
-            e.key ===
-            "ArrowRight"
-        ) {
+        if (e.key === "ArrowRight") {
 
             pageFlip.flipNext();
 
@@ -925,7 +874,25 @@ document.addEventListener(
    INITIAL STATE
 ============================== */
 
+positioner.style.transition =
+    "none";
+
 updateUI(0);
+
+
+/*
+   Restore normal transitions
+   after initial positioning.
+*/
+
+requestAnimationFrame(
+    () => {
+
+        positioner.style.transition =
+            "transform 0.35s ease";
+
+    }
+);
 
 
 
