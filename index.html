@@ -34,7 +34,6 @@ body {
 
 .viewer {
     position: relative;
-
     width: 100vw;
     height: 100vh;
 
@@ -54,7 +53,6 @@ body {
 
 .book-stage {
     position: relative;
-
     width: 100%;
     height: 100%;
 
@@ -62,12 +60,6 @@ body {
     align-items: center;
     justify-content: center;
 }
-
-
-/*
-   This moves the entire book
-   when displaying a single cover.
-*/
 
 .book-positioner {
     position: relative;
@@ -79,7 +71,6 @@ body {
     transition: transform 0.45s ease;
 }
 
-
 #book {
     margin: 0;
 }
@@ -90,7 +81,7 @@ body {
 ========================= */
 
 .page {
-    background: #ffffff;
+    background: #fff;
     overflow: hidden;
 }
 
@@ -99,7 +90,6 @@ body {
     height: 100%;
 
     display: block;
-
     object-fit: fill;
 
     user-select: none;
@@ -113,8 +103,135 @@ body {
 
 .stf__parent {
     box-shadow:
-        0 4px 8px rgba(0,0,0,.10),
-        0 18px 38px rgba(0,0,0,.14);
+        0 3px 7px rgba(0,0,0,.08),
+        0 16px 32px rgba(0,0,0,.13);
+}
+
+
+/* =========================
+   REALISTIC CENTER BINDING
+========================= */
+
+/*
+   This is NOT permanently visible.
+
+   JavaScript only turns it on when
+   the book is resting on an interior
+   two-page spread.
+*/
+
+.binding {
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    left: 50%;
+
+    width: 34px;
+
+    transform: translateX(-50%);
+
+    pointer-events: none;
+
+    z-index: 50;
+
+    opacity: 0;
+
+    transition: opacity 0.12s ease;
+}
+
+
+/*
+   LEFT PAGE:
+   subtle shadow approaching gutter
+*/
+
+.binding::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    right: 50%;
+
+    width: 17px;
+
+    background:
+        linear-gradient(
+            to right,
+            rgba(0,0,0,0),
+            rgba(0,0,0,.015) 35%,
+            rgba(0,0,0,.055) 72%,
+            rgba(0,0,0,.15) 100%
+        );
+}
+
+
+/*
+   RIGHT PAGE:
+   matching gutter shadow
+*/
+
+.binding::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    left: 50%;
+
+    width: 17px;
+
+    background:
+        linear-gradient(
+            to right,
+            rgba(0,0,0,.15) 0%,
+            rgba(0,0,0,.055) 28%,
+            rgba(0,0,0,.015) 65%,
+            rgba(0,0,0,0) 100%
+        );
+}
+
+
+/*
+   VERY THIN PHYSICAL CREASE
+*/
+
+.binding-line {
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    left: 50%;
+
+    width: 1px;
+
+    transform: translateX(-50%);
+
+    background:
+        rgba(0,0,0,.28);
+
+    box-shadow:
+        -1px 0 1px rgba(0,0,0,.08),
+         1px 0 1px rgba(255,255,255,.32);
+
+    z-index: 2;
+}
+
+
+/*
+   Only applied when book
+   is sitting open.
+*/
+
+.binding.visible {
+    opacity: 1;
 }
 
 
@@ -160,7 +277,6 @@ body {
         opacity .15s ease;
 }
 
-
 .arrow:hover {
     background: #fff;
 
@@ -169,18 +285,15 @@ body {
         scale(1.07);
 }
 
-
 .arrow:active {
     transform:
         translateY(-50%)
         scale(.96);
 }
 
-
 #prev {
     left: 22px;
 }
-
 
 #next {
     right: 22px;
@@ -188,7 +301,7 @@ body {
 
 
 /* =========================
-   PAGE COUNTER
+   COUNTER
 ========================= */
 
 .counter {
@@ -208,7 +321,6 @@ body {
     padding: 7px 14px;
 
     font-size: 12px;
-
     color: #555;
 
     z-index: 1000;
@@ -228,7 +340,6 @@ body {
         padding: 12px 8px 65px;
     }
 
-
     .arrow {
         top: auto;
         bottom: 10px;
@@ -241,21 +352,17 @@ body {
         font-size: 27px;
     }
 
-
     .arrow:hover {
         transform: scale(1.05);
     }
-
 
     #prev {
         left: 15px;
     }
 
-
     #next {
         right: 15px;
     }
-
 
     .counter {
         bottom: 17px;
@@ -310,6 +417,20 @@ body {
 
             </div>
 
+
+            <!--
+                Dynamic center gutter.
+                It sits at the exact center
+                of the open two-page spread.
+            -->
+
+            <div
+                id="binding"
+                class="binding"
+            >
+                <div class="binding-line"></div>
+            </div>
+
         </div>
 
     </div>
@@ -317,8 +438,6 @@ body {
 </div>
 
 
-
-<!-- NAVIGATION -->
 
 <button
     id="prev"
@@ -339,8 +458,6 @@ body {
 
 
 
-<!-- PAGE COUNTER -->
-
 <div
     id="counter"
     class="counter"
@@ -349,8 +466,6 @@ body {
 </div>
 
 
-
-<!-- PAGE TURN SOUND -->
 
 <audio
     id="pageSound"
@@ -364,48 +479,30 @@ body {
 
 
 /* ==============================
-   CALCULATE LARGE PAGE SIZE
+   PAGE SIZE
 ============================== */
 
 function calculatePageSize() {
-
-    /*
-       Individual page ratio:
-       11 × 8.5 landscape
-    */
 
     const ratio =
         11 / 8.5;
 
 
-    /*
-       Leave room for navigation
-       arrows and bottom counter.
-    */
-
     const availableWidth =
         window.innerWidth - 190;
+
 
     const availableHeight =
         window.innerHeight - 100;
 
 
-    /*
-       Desktop spread contains
-       two complete pages.
-    */
-
     let pageWidth =
         availableWidth / 2;
+
 
     let pageHeight =
         pageWidth / ratio;
 
-
-    /*
-       If too tall, size based
-       on available height.
-    */
 
     if (
         pageHeight >
@@ -420,10 +517,6 @@ function calculatePageSize() {
 
     }
 
-
-    /*
-       Minimum usable page size.
-    */
 
     pageWidth =
         Math.max(
@@ -464,51 +557,23 @@ const pageFlip =
         document.getElementById("book"),
         {
 
-            /*
-               ONE COMPLETE
-               LANDSCAPE PAGE
-            */
-
             width:
                 pageSize.width,
 
             height:
                 pageSize.height,
 
-
-            /*
-               We calculate the
-               responsive dimensions.
-            */
-
             size:
                 "fixed",
-
-
-            /*
-               Desktop uses spreads.
-            */
 
             usePortrait:
                 false,
 
-
-            /*
-               Page 1 / Page 26
-               behave as covers.
-            */
-
             showCover:
                 true,
 
-
             autoSize:
                 false,
-
-
-            /*
-               PAGE TURN EFFECT
-            */
 
             drawShadow:
                 true,
@@ -529,10 +594,6 @@ const pageFlip =
     );
 
 
-
-/* ==============================
-   LOAD ALL 26 PAGES
-============================== */
 
 pageFlip.loadFromHTML(
     document.querySelectorAll(
@@ -570,6 +631,12 @@ const positioner =
     );
 
 
+const binding =
+    document.getElementById(
+        "binding"
+    );
+
+
 const pageSound =
     document.getElementById(
         "pageSound"
@@ -578,17 +645,12 @@ const pageSound =
 
 
 /* ==============================
-   PAGE SOUND
+   SOUND
 ============================== */
 
 function playPageSound() {
 
     try {
-
-        /*
-           Stop previous playback
-           and restart immediately.
-        */
 
         pageSound.pause();
 
@@ -621,7 +683,189 @@ function playPageSound() {
 
 
 /* ==============================
-   NAVIGATION
+   COVER / SPREAD POSITION
+============================== */
+
+function positionBook(index) {
+
+    const total =
+        pageFlip.getPageCount();
+
+
+    /*
+       FRONT COVER
+    */
+
+    if (
+        index === 0
+    ) {
+
+        positioner.style.transform =
+            "translateX(-" +
+            (pageSize.width / 2) +
+            "px)";
+
+
+        /*
+           No binding on a
+           single cover.
+        */
+
+        binding.classList.remove(
+            "visible"
+        );
+
+    }
+
+
+    /*
+       BACK COVER
+    */
+
+    else if (
+        index >=
+        total - 1
+    ) {
+
+        positioner.style.transform =
+            "translateX(" +
+            (pageSize.width / 2) +
+            "px)";
+
+
+        binding.classList.remove(
+            "visible"
+        );
+
+    }
+
+
+    /*
+       INTERIOR SPREAD
+    */
+
+    else {
+
+        positioner.style.transform =
+            "translateX(0px)";
+
+
+        binding.classList.add(
+            "visible"
+        );
+
+    }
+
+}
+
+
+
+/* ==============================
+   UPDATE UI
+============================== */
+
+function updateUI(index) {
+
+    const total =
+        pageFlip.getPageCount();
+
+
+    const current =
+        index + 1;
+
+
+    counter.textContent =
+        current +
+        " / " +
+        total;
+
+
+    positionBook(index);
+
+
+    prev.style.opacity =
+        current <= 1
+        ? ".30"
+        : "1";
+
+
+    next.style.opacity =
+        current >= total
+        ? ".30"
+        : "1";
+
+}
+
+
+
+/* ==============================
+   PAGE STARTS TURNING
+============================== */
+
+pageFlip.on(
+    "changeState",
+    e => {
+
+        if (
+            e.data ===
+            "flipping"
+        ) {
+
+            /*
+               IMPORTANT:
+
+               Remove our stationary
+               gutter immediately.
+
+               StPageFlip's own dynamic
+               shadows now handle the
+               moving page.
+            */
+
+            binding.classList.remove(
+                "visible"
+            );
+
+
+            /*
+               Start sound at beginning
+               of page movement.
+            */
+
+            playPageSound();
+
+        }
+
+    }
+);
+
+
+
+/* ==============================
+   PAGE FINISHED TURNING
+============================== */
+
+pageFlip.on(
+    "flip",
+    e => {
+
+        /*
+           Update cover position,
+           counter and restore the
+           binding when appropriate.
+        */
+
+        updateUI(
+            e.data
+        );
+
+    }
+);
+
+
+
+/* ==============================
+   BUTTONS
 ============================== */
 
 prev.addEventListener(
@@ -646,174 +890,7 @@ next.addEventListener(
 
 
 /* ==============================
-   CENTER FRONT / BACK COVER
-============================== */
-
-function positionBook(index) {
-
-    const total =
-        pageFlip.getPageCount();
-
-
-    /*
-       FRONT COVER
-
-       StPageFlip displays the
-       front cover on one side of
-       its full spread area.
-
-       Shift by half a page so
-       the single cover lands
-       in the center.
-    */
-
-    if (
-        index === 0
-    ) {
-
-        positioner.style.transform =
-            "translateX(-" +
-            (pageSize.width / 2) +
-            "px)";
-
-    }
-
-
-    /*
-       BACK COVER
-
-       Shift in the opposite
-       direction.
-    */
-
-    else if (
-        index >=
-        total - 1
-    ) {
-
-        positioner.style.transform =
-            "translateX(" +
-            (pageSize.width / 2) +
-            "px)";
-
-    }
-
-
-    /*
-       NORMAL INTERIOR SPREAD
-    */
-
-    else {
-
-        positioner.style.transform =
-            "translateX(0px)";
-
-    }
-
-}
-
-
-
-/* ==============================
-   UPDATE UI
-============================== */
-
-function updateUI(index) {
-
-    const total =
-        pageFlip.getPageCount();
-
-
-    const current =
-        index + 1;
-
-
-    /*
-       PAGE COUNTER
-    */
-
-    counter.textContent =
-        current +
-        " / " +
-        total;
-
-
-    /*
-       CENTER BOOK/COVERS
-    */
-
-    positionBook(index);
-
-
-    /*
-       BUTTON STATES
-    */
-
-    prev.style.opacity =
-        current <= 1
-        ? ".30"
-        : "1";
-
-
-    next.style.opacity =
-        current >= total
-        ? ".30"
-        : "1";
-
-}
-
-
-
-/* ==============================
-   SOUND STARTS AS SOON AS
-   PAGE BEGINS MOVING
-============================== */
-
-pageFlip.on(
-    "changeState",
-    e => {
-
-        if (
-            e.data ===
-            "flipping"
-        ) {
-
-            playPageSound();
-
-        }
-
-    }
-);
-
-
-
-/* ==============================
-   PAGE CHANGED
-============================== */
-
-pageFlip.on(
-    "flip",
-    e => {
-
-        updateUI(
-            e.data
-        );
-
-    }
-);
-
-
-
-/* ==============================
-   INITIAL STATE
-============================== */
-
-updateUI(0);
-
-
-
-/* ==============================
-   KEYBOARD NAVIGATION
+   KEYBOARD
 ============================== */
 
 document.addEventListener(
@@ -845,7 +922,15 @@ document.addEventListener(
 
 
 /* ==============================
-   RESPONSIVE RESIZE
+   INITIAL STATE
+============================== */
+
+updateUI(0);
+
+
+
+/* ==============================
+   RESIZE
 ============================== */
 
 let resizeTimer;
