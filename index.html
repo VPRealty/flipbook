@@ -28,7 +28,9 @@ body {
 }
 
 
-/* VIEWER */
+/* ==============================
+   MAIN VIEWER
+============================== */
 
 .viewer {
     width: 100vw;
@@ -38,14 +40,25 @@ body {
     align-items: center;
     justify-content: center;
 
-    padding: 35px 85px;
+    padding: 25px 85px 55px;
+
+    overflow: hidden;
 }
 
 
-/* BOOK */
+/* ==============================
+   BOOK
+============================== */
 
 .book-wrapper {
     position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
 }
 
 #book {
@@ -53,10 +66,12 @@ body {
 }
 
 
-/* EACH INDIVIDUAL PAGE IS LANDSCAPE */
+/* ==============================
+   INDIVIDUAL LANDSCAPE PAGES
+============================== */
 
 .page {
-    background: white;
+    background: #ffffff;
     overflow: hidden;
 }
 
@@ -73,38 +88,45 @@ body {
 }
 
 
-/* BOOK SHADOW */
+/* ==============================
+   BOOK SHADOW
+============================== */
 
 .stf__parent {
     box-shadow:
-        0 3px 7px rgba(0,0,0,.10),
-        0 15px 35px rgba(0,0,0,.12);
+        0 4px 8px rgba(0,0,0,.10),
+        0 18px 38px rgba(0,0,0,.14);
 }
 
 
-/* CENTER SPINE */
+/* ==============================
+   CENTER SPINE
+============================== */
 
 .spine {
     position: absolute;
 
-    top: 0;
-    bottom: 0;
-
+    top: 50%;
     left: 50%;
 
-    width: 1px;
+    transform: translate(-50%, -50%);
 
-    background: rgba(0,0,0,.32);
+    width: 1px;
+    height: var(--book-height, 70%);
+
+    background: rgba(0,0,0,.30);
 
     box-shadow:
-        -5px 0 12px rgba(0,0,0,.08),
-         5px 0 12px rgba(0,0,0,.08);
-
-    z-index: 100;
+        -6px 0 14px rgba(0,0,0,.08),
+         6px 0 14px rgba(0,0,0,.08);
 
     pointer-events: none;
 
+    z-index: 100;
+
     opacity: 0;
+
+    transition: opacity .2s ease;
 }
 
 .spine.show {
@@ -112,7 +134,9 @@ body {
 }
 
 
-/* ARROWS */
+/* ==============================
+   NAVIGATION ARROWS
+============================== */
 
 .arrow {
     position: fixed;
@@ -121,18 +145,19 @@ body {
 
     transform: translateY(-50%);
 
-    width: 52px;
-    height: 52px;
+    width: 54px;
+    height: 54px;
 
     border-radius: 50%;
 
-    border: 1px solid #bbb;
+    border: 1px solid #bdbdbd;
 
     background: rgba(255,255,255,.96);
 
     color: #222;
 
-    font-size: 31px;
+    font-size: 32px;
+    font-weight: 300;
 
     cursor: pointer;
 
@@ -143,10 +168,25 @@ body {
     z-index: 1000;
 
     box-shadow: 0 2px 8px rgba(0,0,0,.08);
+
+    transition:
+        transform .15s ease,
+        background .15s ease,
+        opacity .15s ease;
 }
 
 .arrow:hover {
-    background: white;
+    background: #fff;
+
+    transform:
+        translateY(-50%)
+        scale(1.07);
+}
+
+.arrow:active {
+    transform:
+        translateY(-50%)
+        scale(.96);
 }
 
 #prev {
@@ -158,38 +198,44 @@ body {
 }
 
 
-/* COUNTER */
+/* ==============================
+   PAGE COUNTER
+============================== */
 
 .counter {
     position: fixed;
 
-    bottom: 15px;
+    bottom: 12px;
     left: 50%;
 
     transform: translateX(-50%);
 
-    background: rgba(255,255,255,.95);
+    background: rgba(255,255,255,.96);
 
-    border: 1px solid #d5d5d5;
+    border: 1px solid #d4d4d4;
 
     border-radius: 20px;
 
-    padding: 7px 13px;
+    padding: 7px 14px;
 
     font-size: 12px;
 
     color: #555;
 
     z-index: 1000;
+
+    box-shadow: 0 2px 7px rgba(0,0,0,.05);
 }
 
 
-/* MOBILE */
+/* ==============================
+   MOBILE
+============================== */
 
 @media (max-width: 768px) {
 
     .viewer {
-        padding: 15px 10px 70px;
+        padding: 12px 8px 65px;
     }
 
     .spine {
@@ -198,12 +244,18 @@ body {
 
     .arrow {
         top: auto;
-        bottom: 12px;
+        bottom: 10px;
 
         transform: none;
 
-        width: 43px;
-        height: 43px;
+        width: 44px;
+        height: 44px;
+
+        font-size: 27px;
+    }
+
+    .arrow:hover {
+        transform: scale(1.05);
     }
 
     #prev {
@@ -212,6 +264,10 @@ body {
 
     #next {
         right: 15px;
+    }
+
+    .counter {
+        bottom: 17px;
     }
 
 }
@@ -229,31 +285,32 @@ body {
 
         <div id="book">
 
-            <div class="page"><img src="1.jpg"></div>
-            <div class="page"><img src="2.jpg"></div>
-            <div class="page"><img src="3.jpg"></div>
-            <div class="page"><img src="4.jpg"></div>
-            <div class="page"><img src="5.jpg"></div>
-            <div class="page"><img src="6.jpg"></div>
-            <div class="page"><img src="7.jpg"></div>
-            <div class="page"><img src="8.jpg"></div>
-            <div class="page"><img src="9.jpg"></div>
-            <div class="page"><img src="10.jpg"></div>
-            <div class="page"><img src="11.jpg"></div>
-            <div class="page"><img src="12.jpg"></div>
-            <div class="page"><img src="13.jpg"></div>
-            <div class="page"><img src="14.jpg"></div>
-            <div class="page"><img src="15.jpg"></div>
-            <div class="page"><img src="16.jpg"></div>
-            <div class="page"><img src="17.jpg"></div>
-            <div class="page"><img src="18.jpg"></div>
-            <div class="page"><img src="19.jpg"></div>
-            <div class="page"><img src="20.jpg"></div>
-            <div class="page"><img src="21.jpg"></div>
-            <div class="page"><img src="22.jpg"></div>
-            <div class="page"><img src="23.jpg"></div>
-            <div class="page"><img src="24.jpg"></div>
-            <div class="page"><img src="25.jpg"></div>
+            <div class="page"><img src="1.jpg" alt="Page 1"></div>
+            <div class="page"><img src="2.jpg" alt="Page 2"></div>
+            <div class="page"><img src="3.jpg" alt="Page 3"></div>
+            <div class="page"><img src="4.jpg" alt="Page 4"></div>
+            <div class="page"><img src="5.jpg" alt="Page 5"></div>
+            <div class="page"><img src="6.jpg" alt="Page 6"></div>
+            <div class="page"><img src="7.jpg" alt="Page 7"></div>
+            <div class="page"><img src="8.jpg" alt="Page 8"></div>
+            <div class="page"><img src="9.jpg" alt="Page 9"></div>
+            <div class="page"><img src="10.jpg" alt="Page 10"></div>
+            <div class="page"><img src="11.jpg" alt="Page 11"></div>
+            <div class="page"><img src="12.jpg" alt="Page 12"></div>
+            <div class="page"><img src="13.jpg" alt="Page 13"></div>
+            <div class="page"><img src="14.jpg" alt="Page 14"></div>
+            <div class="page"><img src="15.jpg" alt="Page 15"></div>
+            <div class="page"><img src="16.jpg" alt="Page 16"></div>
+            <div class="page"><img src="17.jpg" alt="Page 17"></div>
+            <div class="page"><img src="18.jpg" alt="Page 18"></div>
+            <div class="page"><img src="19.jpg" alt="Page 19"></div>
+            <div class="page"><img src="20.jpg" alt="Page 20"></div>
+            <div class="page"><img src="21.jpg" alt="Page 21"></div>
+            <div class="page"><img src="22.jpg" alt="Page 22"></div>
+            <div class="page"><img src="23.jpg" alt="Page 23"></div>
+            <div class="page"><img src="24.jpg" alt="Page 24"></div>
+            <div class="page"><img src="25.jpg" alt="Page 25"></div>
+            <div class="page"><img src="26.jpg" alt="Page 26"></div>
 
         </div>
 
@@ -264,61 +321,155 @@ body {
 </div>
 
 
-<button id="prev" class="arrow">‹</button>
-<button id="next" class="arrow">›</button>
+<button
+    id="prev"
+    class="arrow"
+    aria-label="Previous page">
+    ‹
+</button>
 
-<div id="counter" class="counter">1 / 25</div>
+
+<button
+    id="next"
+    class="arrow"
+    aria-label="Next page">
+    ›
+</button>
+
+
+<div
+    id="counter"
+    class="counter">
+    1 / 26
+</div>
 
 
 <script>
+
+/* ==================================
+   CALCULATE LARGE RESPONSIVE PAGE
+================================== */
+
+function calculatePageSize() {
+
+    /*
+       Each individual page has an
+       11 : 8.5 landscape ratio.
+
+       Desktop needs room for TWO
+       pages beside each other.
+    */
+
+    const ratio = 11 / 8.5;
+
+    const availableWidth =
+        window.innerWidth - 190;
+
+    const availableHeight =
+        window.innerHeight - 100;
+
+
+    /*
+       Width available for ONE page
+       when displaying a spread.
+    */
+
+    let pageWidth =
+        availableWidth / 2;
+
+    let pageHeight =
+        pageWidth / ratio;
+
+
+    /*
+       If that is too tall for the
+       screen, size from height instead.
+    */
+
+    if (pageHeight > availableHeight) {
+
+        pageHeight =
+            availableHeight;
+
+        pageWidth =
+            pageHeight * ratio;
+    }
+
+
+    /*
+       Keep sensible minimums.
+    */
+
+    pageWidth =
+        Math.max(330, pageWidth);
+
+    pageHeight =
+        pageWidth / ratio;
+
+
+    return {
+        width: Math.round(pageWidth),
+        height: Math.round(pageHeight)
+    };
+}
+
+
+const pageSize =
+    calculatePageSize();
+
+
+/* ==================================
+   CREATE FLIPBOOK
+================================== */
 
 const pageFlip = new St.PageFlip(
     document.getElementById("book"),
     {
 
         /*
-        IMPORTANT:
-
-        These dimensions describe ONE page,
-        not the entire open book.
-
-        Each page = 11 x 8.5 landscape.
+           ONE COMPLETE LANDSCAPE PAGE
         */
 
-        width: 1100,
-        height: 850,
+        width: pageSize.width,
+        height: pageSize.height,
 
 
         /*
-        Allow the entire two-page spread
-        to scale while preserving the
-        landscape aspect ratio.
+           FIXED means StPageFlip keeps
+           the correct landscape ratio.
+
+           We calculate the largest size
+           that fits the browser ourselves.
         */
 
-        size: "stretch",
-
-        minWidth: 275,
-        maxWidth: 1100,
-
-        minHeight: 212.5,
-        maxHeight: 850,
+        size: "fixed",
 
 
         /*
-        Desktop = two pages.
-        Mobile automatically becomes
-        one page.
+           Two-page desktop book.
         */
 
         usePortrait: false,
 
-        autoSize: true,
+
+        /*
+           Page 1 is front cover.
+           Page 26 becomes back cover.
+        */
 
         showCover: true,
 
 
         /*
-        PAGE TURN
+           Don't let StPageFlip apply
+           another automatic scaling pass.
+        */
+
+        autoSize: false,
+
+
+        /*
+           TURNING EFFECT
         */
 
         drawShadow: true,
@@ -330,9 +481,12 @@ const pageFlip = new St.PageFlip(
         mobileScrollSupport: false,
 
         useMouseEvents: true
+
     }
 );
 
+
+/* LOAD 26 PAGES */
 
 pageFlip.loadFromHTML(
     document.querySelectorAll(".page")
@@ -352,18 +506,29 @@ const spine =
     document.getElementById("spine");
 
 
-/* NAVIGATION */
+/* ==================================
+   NAVIGATION
+================================== */
 
-prev.addEventListener("click", () => {
-    pageFlip.flipPrev();
-});
+prev.addEventListener(
+    "click",
+    () => {
+        pageFlip.flipPrev();
+    }
+);
 
-next.addEventListener("click", () => {
-    pageFlip.flipNext();
-});
+
+next.addEventListener(
+    "click",
+    () => {
+        pageFlip.flipNext();
+    }
+);
 
 
-/* UPDATE INTERFACE */
+/* ==================================
+   UPDATE BOOK UI
+================================== */
 
 function updateUI(index) {
 
@@ -373,48 +538,87 @@ function updateUI(index) {
     const current =
         index + 1;
 
+
+    /*
+       COUNTER
+    */
+
     counter.textContent =
-        current + " / " + total;
+        current +
+        " / " +
+        total;
 
 
     /*
-    SHOW CENTER SEAM
-    AFTER FRONT COVER
+       SPINE
+
+       Only visible while an actual
+       two-page spread is open.
+
+       Front and back covers do not
+       show the center seam.
     */
 
     if (
         current > 1 &&
+        current < total &&
         window.innerWidth > 768
     ) {
+
         spine.classList.add("show");
-    }
-    else {
-        spine.classList.remove("show");
+
+        spine.style.setProperty(
+            "--book-height",
+            pageSize.height + "px"
+        );
+
     }
 
+    else {
+
+        spine.classList.remove("show");
+
+    }
+
+
+    /*
+       ARROW STATES
+    */
 
     prev.style.opacity =
         current <= 1
-        ? ".35"
+        ? ".30"
         : "1";
 
 
     next.style.opacity =
         current >= total
-        ? ".35"
+        ? ".30"
         : "1";
+
 }
 
 
-pageFlip.on("flip", e => {
-    updateUI(e.data);
-});
+/* PAGE CHANGED */
 
+pageFlip.on(
+    "flip",
+    e => {
+
+        updateUI(e.data);
+
+    }
+);
+
+
+/* INITIAL */
 
 updateUI(0);
 
 
-/* KEYBOARD */
+/* ==================================
+   KEYBOARD
+================================== */
 
 document.addEventListener(
     "keydown",
@@ -431,8 +635,34 @@ document.addEventListener(
     }
 );
 
-</script>
 
+/* ==================================
+   RESIZE
+
+   Recalculate the book if browser
+   size changes.
+================================== */
+
+let resizeTimer;
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        clearTimeout(resizeTimer);
+
+        resizeTimer =
+            setTimeout(
+                () => {
+                    location.reload();
+                },
+                250
+            );
+
+    }
+);
+
+</script>
 
 </body>
 </html>
