@@ -1,192 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<title>5106 Padre Blvd Flipbook</title>
 
-    <title>5106 Padre Blvd Flipbook</title>
+<script src="https://unpkg.com/page-flip/dist/js/page-flip.browser.js"></script>
 
-    <script src="https://unpkg.com/page-flip/dist/js/page-flip.browser.js"></script>
+<style>
 
-    <style>
+* {
+    box-sizing: border-box;
+}
 
-        * {
-            box-sizing: border-box;
-        }
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
 
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-        }
-
-        body {
-            background: #f4f4f4;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-        }
-
-        .viewer {
-            position: relative;
-
-            width: 100vw;
-            height: 100vh;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            overflow: hidden;
-        }
+body {
+    background: #f3f3f3;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
 
 
-        /* =========================
-           FLIPBOOK
-        ========================= */
+/* =========================
+   VIEWER
+========================= */
 
-        #book {
-            margin: auto;
-        }
+.viewer {
+    position: relative;
 
-        .page {
-            background: #ffffff;
-            overflow: hidden;
-        }
+    width: 100vw;
+    height: 100vh;
 
-        .page img {
-            width: 100%;
-            height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            display: block;
+    padding: 25px 90px 55px;
 
-            object-fit: contain;
-
-            user-select: none;
-            -webkit-user-drag: none;
-        }
+    overflow: hidden;
+}
 
 
-        /* =========================
-           NAVIGATION ARROWS
-        ========================= */
+/* =========================
+   BOOK STAGE
+========================= */
 
-        .nav-button {
-            position: fixed;
+.book-stage {
+    position: relative;
 
-            top: 50%;
-            transform: translateY(-50%);
+    width: 100%;
+    height: 100%;
 
-            width: 58px;
-            height: 58px;
-
-            border-radius: 50%;
-
-            border: 1px solid #c8c8c8;
-
-            background: rgba(255, 255, 255, 0.95);
-
-            color: #222;
-
-            font-size: 34px;
-            line-height: 1;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            cursor: pointer;
-
-            z-index: 9999;
-
-            box-shadow:
-                0 2px 6px rgba(0, 0, 0, 0.08);
-
-            transition:
-                background 0.2s ease,
-                transform 0.2s ease,
-                opacity 0.2s ease;
-        }
-
-        .nav-button:hover {
-            background: #ffffff;
-
-            transform:
-                translateY(-50%)
-                scale(1.06);
-        }
-
-        #prev {
-            left: 24px;
-        }
-
-        #next {
-            right: 24px;
-        }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 
-        /* =========================
-           PAGE NUMBER
-        ========================= */
+/*
+   This moves the entire book
+   when displaying a single cover.
+*/
 
-        #page-number {
-            position: fixed;
+.book-positioner {
+    position: relative;
 
-            left: 50%;
-            bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            transform: translateX(-50%);
-
-            background: rgba(255, 255, 255, 0.95);
-
-            border: 1px solid #dddddd;
-
-            border-radius: 18px;
-
-            padding: 7px 14px;
-
-            font-size: 13px;
-            color: #555;
-
-            z-index: 9999;
-
-            box-shadow:
-                0 1px 4px rgba(0, 0, 0, 0.08);
-        }
+    transition: transform 0.45s ease;
+}
 
 
-        /* =========================
-           MOBILE
-        ========================= */
+#book {
+    margin: 0;
+}
 
-        @media (max-width: 700px) {
 
-            .nav-button {
-                width: 46px;
-                height: 46px;
+/* =========================
+   PAGES
+========================= */
 
-                font-size: 28px;
-            }
+.page {
+    background: #ffffff;
+    overflow: hidden;
+}
 
-            #prev {
-                left: 10px;
-            }
+.page img {
+    width: 100%;
+    height: 100%;
 
-            #next {
-                right: 10px;
-            }
+    display: block;
 
-            #page-number {
-                bottom: 10px;
-            }
+    object-fit: fill;
 
-        }
+    user-select: none;
+    -webkit-user-drag: none;
+}
 
-    </style>
+
+/* =========================
+   BOOK SHADOW
+========================= */
+
+.stf__parent {
+    box-shadow:
+        0 4px 8px rgba(0,0,0,.10),
+        0 18px 38px rgba(0,0,0,.14);
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.arrow {
+    position: fixed;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 54px;
+    height: 54px;
+
+    border-radius: 50%;
+
+    border: 1px solid #bdbdbd;
+
+    background: rgba(255,255,255,.96);
+
+    color: #222;
+
+    font-size: 32px;
+    font-weight: 300;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    z-index: 1000;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.08);
+
+    transition:
+        transform .15s ease,
+        background .15s ease,
+        opacity .15s ease;
+}
+
+
+.arrow:hover {
+    background: #fff;
+
+    transform:
+        translateY(-50%)
+        scale(1.07);
+}
+
+
+.arrow:active {
+    transform:
+        translateY(-50%)
+        scale(.96);
+}
+
+
+#prev {
+    left: 22px;
+}
+
+
+#next {
+    right: 22px;
+}
+
+
+/* =========================
+   PAGE COUNTER
+========================= */
+
+.counter {
+    position: fixed;
+
+    bottom: 12px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background: rgba(255,255,255,.96);
+
+    border: 1px solid #d4d4d4;
+
+    border-radius: 20px;
+
+    padding: 7px 14px;
+
+    font-size: 12px;
+
+    color: #555;
+
+    z-index: 1000;
+
+    box-shadow:
+        0 2px 7px rgba(0,0,0,.05);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+    .viewer {
+        padding: 12px 8px 65px;
+    }
+
+
+    .arrow {
+        top: auto;
+        bottom: 10px;
+
+        transform: none;
+
+        width: 44px;
+        height: 44px;
+
+        font-size: 27px;
+    }
+
+
+    .arrow:hover {
+        transform: scale(1.05);
+    }
+
+
+    #prev {
+        left: 15px;
+    }
+
+
+    #next {
+        right: 15px;
+    }
+
+
+    .counter {
+        bottom: 17px;
+    }
+
+}
+
+</style>
 </head>
 
 
@@ -195,149 +272,79 @@
 
 <div class="viewer">
 
+    <div class="book-stage">
 
-    <!-- LEFT ARROW -->
+        <div
+            id="book-positioner"
+            class="book-positioner"
+        >
 
-    <button
-        class="nav-button"
-        id="prev"
-        aria-label="Previous page"
-    >
-        ‹
-    </button>
+            <div id="book">
 
+                <div class="page"><img src="1.jpg" alt="Page 1"></div>
+                <div class="page"><img src="2.jpg" alt="Page 2"></div>
+                <div class="page"><img src="3.jpg" alt="Page 3"></div>
+                <div class="page"><img src="4.jpg" alt="Page 4"></div>
+                <div class="page"><img src="5.jpg" alt="Page 5"></div>
+                <div class="page"><img src="6.jpg" alt="Page 6"></div>
+                <div class="page"><img src="7.jpg" alt="Page 7"></div>
+                <div class="page"><img src="8.jpg" alt="Page 8"></div>
+                <div class="page"><img src="9.jpg" alt="Page 9"></div>
+                <div class="page"><img src="10.jpg" alt="Page 10"></div>
+                <div class="page"><img src="11.jpg" alt="Page 11"></div>
+                <div class="page"><img src="12.jpg" alt="Page 12"></div>
+                <div class="page"><img src="13.jpg" alt="Page 13"></div>
+                <div class="page"><img src="14.jpg" alt="Page 14"></div>
+                <div class="page"><img src="15.jpg" alt="Page 15"></div>
+                <div class="page"><img src="16.jpg" alt="Page 16"></div>
+                <div class="page"><img src="17.jpg" alt="Page 17"></div>
+                <div class="page"><img src="18.jpg" alt="Page 18"></div>
+                <div class="page"><img src="19.jpg" alt="Page 19"></div>
+                <div class="page"><img src="20.jpg" alt="Page 20"></div>
+                <div class="page"><img src="21.jpg" alt="Page 21"></div>
+                <div class="page"><img src="22.jpg" alt="Page 22"></div>
+                <div class="page"><img src="23.jpg" alt="Page 23"></div>
+                <div class="page"><img src="24.jpg" alt="Page 24"></div>
+                <div class="page"><img src="25.jpg" alt="Page 25"></div>
+                <div class="page"><img src="26.jpg" alt="Back Cover"></div>
 
+            </div>
 
-    <!-- FLIPBOOK -->
-
-    <div id="book">
-
-        <div class="page">
-            <img src="1.jpg" alt="Page 1">
-        </div>
-
-        <div class="page">
-            <img src="2.jpg" alt="Page 2">
-        </div>
-
-        <div class="page">
-            <img src="3.jpg" alt="Page 3">
-        </div>
-
-        <div class="page">
-            <img src="4.jpg" alt="Page 4">
-        </div>
-
-        <div class="page">
-            <img src="5.jpg" alt="Page 5">
-        </div>
-
-        <div class="page">
-            <img src="6.jpg" alt="Page 6">
-        </div>
-
-        <div class="page">
-            <img src="7.jpg" alt="Page 7">
-        </div>
-
-        <div class="page">
-            <img src="8.jpg" alt="Page 8">
-        </div>
-
-        <div class="page">
-            <img src="9.jpg" alt="Page 9">
-        </div>
-
-        <div class="page">
-            <img src="10.jpg" alt="Page 10">
-        </div>
-
-        <div class="page">
-            <img src="11.jpg" alt="Page 11">
-        </div>
-
-        <div class="page">
-            <img src="12.jpg" alt="Page 12">
-        </div>
-
-        <div class="page">
-            <img src="13.jpg" alt="Page 13">
-        </div>
-
-        <div class="page">
-            <img src="14.jpg" alt="Page 14">
-        </div>
-
-        <div class="page">
-            <img src="15.jpg" alt="Page 15">
-        </div>
-
-        <div class="page">
-            <img src="16.jpg" alt="Page 16">
-        </div>
-
-        <div class="page">
-            <img src="17.jpg" alt="Page 17">
-        </div>
-
-        <div class="page">
-            <img src="18.jpg" alt="Page 18">
-        </div>
-
-        <div class="page">
-            <img src="19.jpg" alt="Page 19">
-        </div>
-
-        <div class="page">
-            <img src="20.jpg" alt="Page 20">
-        </div>
-
-        <div class="page">
-            <img src="21.jpg" alt="Page 21">
-        </div>
-
-        <div class="page">
-            <img src="22.jpg" alt="Page 22">
-        </div>
-
-        <div class="page">
-            <img src="23.jpg" alt="Page 23">
-        </div>
-
-        <div class="page">
-            <img src="24.jpg" alt="Page 24">
-        </div>
-
-        <div class="page">
-            <img src="25.jpg" alt="Page 25">
-        </div>
-
-        <div class="page">
-            <img src="26.jpg" alt="Back Cover">
         </div>
 
     </div>
-
-
-
-    <!-- RIGHT ARROW -->
-
-    <button
-        class="nav-button"
-        id="next"
-        aria-label="Next page"
-    >
-        ›
-    </button>
-
 
 </div>
 
 
 
+<!-- NAVIGATION -->
+
+<button
+    id="prev"
+    class="arrow"
+    aria-label="Previous page"
+>
+    ‹
+</button>
+
+
+<button
+    id="next"
+    class="arrow"
+    aria-label="Next page"
+>
+    ›
+</button>
+
+
+
 <!-- PAGE COUNTER -->
 
-<div id="page-number">
+<div
+    id="counter"
+    class="counter"
+>
     1 / 26
 </div>
 
@@ -355,262 +362,516 @@
 
 <script>
 
-    /* =========================
-       CREATE FLIPBOOK
-    ========================= */
 
-    const pageFlip = new St.PageFlip(
+/* ==============================
+   CALCULATE LARGE PAGE SIZE
+============================== */
+
+function calculatePageSize() {
+
+    /*
+       Individual page ratio:
+       11 × 8.5 landscape
+    */
+
+    const ratio =
+        11 / 8.5;
+
+
+    /*
+       Leave room for navigation
+       arrows and bottom counter.
+    */
+
+    const availableWidth =
+        window.innerWidth - 190;
+
+    const availableHeight =
+        window.innerHeight - 100;
+
+
+    /*
+       Desktop spread contains
+       two complete pages.
+    */
+
+    let pageWidth =
+        availableWidth / 2;
+
+    let pageHeight =
+        pageWidth / ratio;
+
+
+    /*
+       If too tall, size based
+       on available height.
+    */
+
+    if (
+        pageHeight >
+        availableHeight
+    ) {
+
+        pageHeight =
+            availableHeight;
+
+        pageWidth =
+            pageHeight * ratio;
+
+    }
+
+
+    /*
+       Minimum usable page size.
+    */
+
+    pageWidth =
+        Math.max(
+            330,
+            pageWidth
+        );
+
+
+    pageHeight =
+        pageWidth / ratio;
+
+
+    return {
+
+        width:
+            Math.round(pageWidth),
+
+        height:
+            Math.round(pageHeight)
+
+    };
+
+}
+
+
+
+const pageSize =
+    calculatePageSize();
+
+
+
+/* ==============================
+   CREATE FLIPBOOK
+============================== */
+
+const pageFlip =
+    new St.PageFlip(
         document.getElementById("book"),
         {
 
             /*
-             * LANDSCAPE 8.5 x 11 RATIO
-             *
-             * One image = one landscape page.
-             */
+               ONE COMPLETE
+               LANDSCAPE PAGE
+            */
 
-            width: 1100,
-            height: 850,
+            width:
+                pageSize.width,
 
-
-            /*
-             * Responsive sizing
-             */
-
-            size: "stretch",
-
-            minWidth: 440,
-            maxWidth: 1100,
-
-            minHeight: 340,
-            maxHeight: 850,
+            height:
+                pageSize.height,
 
 
             /*
-             * Flip appearance
-             */
+               We calculate the
+               responsive dimensions.
+            */
 
-            maxShadowOpacity: 0.45,
+            size:
+                "fixed",
 
-            showCover: true,
 
-            usePortrait: false,
+            /*
+               Desktop uses spreads.
+            */
 
-            mobileScrollSupport: false,
+            usePortrait:
+                false,
 
-            flippingTime: 850,
 
-            drawShadow: true,
+            /*
+               Page 1 / Page 26
+               behave as covers.
+            */
 
-            autoSize: true,
+            showCover:
+                true,
 
-            clickEventForward: true,
 
-            useMouseEvents: true
+            autoSize:
+                false,
+
+
+            /*
+               PAGE TURN EFFECT
+            */
+
+            drawShadow:
+                true,
+
+            maxShadowOpacity:
+                0.45,
+
+            flippingTime:
+                700,
+
+            mobileScrollSupport:
+                false,
+
+            useMouseEvents:
+                true
 
         }
     );
 
 
 
-    /* =========================
-       LOAD PAGES
-    ========================= */
+/* ==============================
+   LOAD ALL 26 PAGES
+============================== */
 
-    pageFlip.loadFromHTML(
-        document.querySelectorAll(".page")
+pageFlip.loadFromHTML(
+    document.querySelectorAll(
+        ".page"
+    )
+);
+
+
+
+/* ==============================
+   ELEMENTS
+============================== */
+
+const prev =
+    document.getElementById(
+        "prev"
+    );
+
+
+const next =
+    document.getElementById(
+        "next"
+    );
+
+
+const counter =
+    document.getElementById(
+        "counter"
+    );
+
+
+const positioner =
+    document.getElementById(
+        "book-positioner"
+    );
+
+
+const pageSound =
+    document.getElementById(
+        "pageSound"
     );
 
 
 
-    /* =========================
-       PAGE SOUND
-    ========================= */
+/* ==============================
+   PAGE SOUND
+============================== */
 
-    const pageSound =
-        document.getElementById("pageSound");
+function playPageSound() {
+
+    try {
+
+        /*
+           Stop previous playback
+           and restart immediately.
+        */
+
+        pageSound.pause();
+
+        pageSound.currentTime = 0;
+
+        pageSound.volume = 0.35;
 
 
-    function playPageSound() {
+        const playPromise =
+            pageSound.play();
 
-        try {
 
-            /*
-             * Restart immediately so repeated
-             * page turns don't wait for the
-             * previous sound to finish.
-             */
+        if (
+            playPromise !==
+            undefined
+        ) {
 
-            pageSound.pause();
-
-            pageSound.currentTime = 0;
-
-            const playPromise =
-                pageSound.play();
-
-            if (
-                playPromise !== undefined
-            ) {
-
-                playPromise.catch(() => {
-                    /*
-                     * Browser may block audio
-                     * until first interaction.
-                     */
-                });
-
-            }
-
-        } catch (error) {
-
-            console.log(
-                "Page sound unavailable."
+            playPromise.catch(
+                () => {}
             );
 
         }
 
     }
 
+    catch (error) {}
+
+}
 
 
-    /* =========================
-       PAGE COUNTER
-    ========================= */
 
-    const pageNumber =
-        document.getElementById(
-            "page-number"
-        );
+/* ==============================
+   NAVIGATION
+============================== */
 
+prev.addEventListener(
+    "click",
+    () => {
 
-    function updateUI(index) {
+        pageFlip.flipPrev();
 
-        const total =
-            pageFlip.getPageCount();
-
-        const current =
-            index + 1;
+    }
+);
 
 
-        pageNumber.innerText =
-            current +
-            " / " +
-            total;
+next.addEventListener(
+    "click",
+    () => {
+
+        pageFlip.flipNext();
+
+    }
+);
+
+
+
+/* ==============================
+   CENTER FRONT / BACK COVER
+============================== */
+
+function positionBook(index) {
+
+    const total =
+        pageFlip.getPageCount();
+
+
+    /*
+       FRONT COVER
+
+       StPageFlip displays the
+       front cover on one side of
+       its full spread area.
+
+       Shift by half a page so
+       the single cover lands
+       in the center.
+    */
+
+    if (
+        index === 0
+    ) {
+
+        positioner.style.transform =
+            "translateX(-" +
+            (pageSize.width / 2) +
+            "px)";
 
     }
 
 
+    /*
+       BACK COVER
 
-    /* =========================
-       SOUND TIMING
-       
-       changeState fires when the
-       physical flip begins instead
-       of waiting for the flip to
-       finish.
-    ========================= */
+       Shift in the opposite
+       direction.
+    */
 
-    pageFlip.on(
-        "changeState",
-        e => {
+    else if (
+        index >=
+        total - 1
+    ) {
 
-            if (
-                e.data === "flipping"
-            ) {
+        positioner.style.transform =
+            "translateX(" +
+            (pageSize.width / 2) +
+            "px)";
 
-                playPageSound();
+    }
 
-            }
+
+    /*
+       NORMAL INTERIOR SPREAD
+    */
+
+    else {
+
+        positioner.style.transform =
+            "translateX(0px)";
+
+    }
+
+}
+
+
+
+/* ==============================
+   UPDATE UI
+============================== */
+
+function updateUI(index) {
+
+    const total =
+        pageFlip.getPageCount();
+
+
+    const current =
+        index + 1;
+
+
+    /*
+       PAGE COUNTER
+    */
+
+    counter.textContent =
+        current +
+        " / " +
+        total;
+
+
+    /*
+       CENTER BOOK/COVERS
+    */
+
+    positionBook(index);
+
+
+    /*
+       BUTTON STATES
+    */
+
+    prev.style.opacity =
+        current <= 1
+        ? ".30"
+        : "1";
+
+
+    next.style.opacity =
+        current >= total
+        ? ".30"
+        : "1";
+
+}
+
+
+
+/* ==============================
+   SOUND STARTS AS SOON AS
+   PAGE BEGINS MOVING
+============================== */
+
+pageFlip.on(
+    "changeState",
+    e => {
+
+        if (
+            e.data ===
+            "flipping"
+        ) {
+
+            playPageSound();
 
         }
-    );
+
+    }
+);
 
 
 
-    /* =========================
-       UPDATE COUNTER AFTER FLIP
-    ========================= */
+/* ==============================
+   PAGE CHANGED
+============================== */
 
-    pageFlip.on(
-        "flip",
-        e => {
+pageFlip.on(
+    "flip",
+    e => {
 
-            updateUI(e.data);
+        updateUI(
+            e.data
+        );
+
+    }
+);
+
+
+
+/* ==============================
+   INITIAL STATE
+============================== */
+
+updateUI(0);
+
+
+
+/* ==============================
+   KEYBOARD NAVIGATION
+============================== */
+
+document.addEventListener(
+    "keydown",
+    e => {
+
+        if (
+            e.key ===
+            "ArrowLeft"
+        ) {
+
+            pageFlip.flipPrev();
 
         }
-    );
+
+
+        if (
+            e.key ===
+            "ArrowRight"
+        ) {
+
+            pageFlip.flipNext();
+
+        }
+
+    }
+);
 
 
 
-    /* =========================
-       PREVIOUS BUTTON
-    ========================= */
+/* ==============================
+   RESPONSIVE RESIZE
+============================== */
 
-    document
-        .getElementById("prev")
-        .addEventListener(
-            "click",
-            () => {
+let resizeTimer;
 
-                pageFlip.flipPrev();
 
-            }
+window.addEventListener(
+    "resize",
+    () => {
+
+        clearTimeout(
+            resizeTimer
         );
 
 
+        resizeTimer =
+            setTimeout(
+                () => {
 
-    /* =========================
-       NEXT BUTTON
-    ========================= */
+                    location.reload();
 
-    document
-        .getElementById("next")
-        .addEventListener(
-            "click",
-            () => {
+                },
+                250
+            );
 
-                pageFlip.flipNext();
-
-            }
-        );
-
-
-
-    /* =========================
-       KEYBOARD NAVIGATION
-    ========================= */
-
-    document.addEventListener(
-        "keydown",
-        e => {
-
-            if (
-                e.key === "ArrowLeft"
-            ) {
-
-                pageFlip.flipPrev();
-
-            }
-
-
-            if (
-                e.key === "ArrowRight"
-            ) {
-
-                pageFlip.flipNext();
-
-            }
-
-        }
-    );
-
-
-
-    /* =========================
-       INITIAL PAGE NUMBER
-    ========================= */
-
-    updateUI(0);
+    }
+);
 
 
 </script>
