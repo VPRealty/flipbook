@@ -21,138 +21,366 @@
     }
 
     body {
-      background: #eeeeee;
+      background: #f3f3f3;
       font-family: Arial, sans-serif;
       overflow: hidden;
     }
 
+    /* =========================
+       MAIN VIEWER
+    ========================= */
+
     .viewer {
+      position: relative;
       width: 100vw;
       height: 100vh;
+
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px 20px 80px;
+
+      padding: 35px 90px;
+      overflow: hidden;
+    }
+
+    .book-wrapper {
+      position: relative;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      max-width: 100%;
+      max-height: 100%;
     }
 
     #book {
       margin: auto;
     }
 
+
+    /* =========================
+       PAGES
+    ========================= */
+
     .page {
-      background: white;
+      background: #ffffff;
       overflow: hidden;
     }
 
     .page img {
       width: 100%;
       height: 100%;
+
       object-fit: contain;
+
       display: block;
+
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
-    .controls {
-      position: fixed;
-      bottom: 20px;
+
+    /* =========================
+       PAGE DEPTH / BOOK EFFECT
+    ========================= */
+
+    .stf__parent {
+      box-shadow:
+        0 3px 5px rgba(0, 0, 0, 0.10),
+        0 12px 30px rgba(0, 0, 0, 0.12);
+    }
+
+
+    /* =========================
+       CENTER SPINE
+    ========================= */
+
+    .book-spine {
+      position: absolute;
+
+      top: 0;
+      bottom: 0;
+
       left: 50%;
+
+      width: 2px;
+
       transform: translateX(-50%);
+
+      background: rgba(0, 0, 0, 0.20);
+
+      box-shadow:
+        -5px 0 12px rgba(0, 0, 0, 0.08),
+         5px 0 12px rgba(0, 0, 0, 0.08);
+
+      pointer-events: none;
+
+      z-index: 50;
+
+      opacity: 0;
+
+      transition: opacity 0.2s ease;
+    }
+
+    .book-spine.visible {
+      opacity: 1;
+    }
+
+
+    /* =========================
+       NAVIGATION ARROWS
+    ========================= */
+
+    .nav-arrow {
+      position: fixed;
+
+      top: 50%;
+
+      width: 52px;
+      height: 52px;
+
+      transform: translateY(-50%);
+
+      border-radius: 50%;
+
+      border: 1px solid #bdbdbd;
+
+      background: rgba(255, 255, 255, 0.95);
+
+      color: #222;
+
+      font-size: 32px;
+      font-weight: 300;
+
       display: flex;
       align-items: center;
-      gap: 20px;
-      background: rgba(0, 0, 0, 0.75);
-      padding: 10px 18px;
-      border-radius: 30px;
-      color: white;
-      z-index: 1000;
-    }
+      justify-content: center;
 
-    button {
-      background: transparent;
-      border: none;
-      color: white;
-      font-size: 22px;
       cursor: pointer;
+
+      z-index: 1000;
+
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease;
     }
 
-    button:hover {
-      opacity: 0.7;
+    .nav-arrow:hover {
+      background: #ffffff;
+
+      transform:
+        translateY(-50%)
+        scale(1.07);
     }
 
-    #page-number {
-      font-size: 14px;
-      min-width: 70px;
-      text-align: center;
+    .nav-arrow:active {
+      transform:
+        translateY(-50%)
+        scale(0.96);
     }
+
+    #prev {
+      left: 24px;
+    }
+
+    #next {
+      right: 24px;
+    }
+
+
+    /* =========================
+       PAGE COUNTER
+    ========================= */
+
+    .page-counter {
+      position: fixed;
+
+      bottom: 14px;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      padding: 7px 13px;
+
+      border-radius: 20px;
+
+      background: rgba(255, 255, 255, 0.92);
+
+      border: 1px solid #d5d5d5;
+
+      color: #555;
+
+      font-size: 12px;
+
+      z-index: 1000;
+
+      box-shadow: 0 2px 7px rgba(0, 0, 0, 0.05);
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 768px) {
+
+      .viewer {
+        padding: 20px 10px 65px;
+      }
+
+      .nav-arrow {
+        width: 44px;
+        height: 44px;
+
+        font-size: 27px;
+
+        top: auto;
+        bottom: 10px;
+
+        transform: none;
+      }
+
+      .nav-arrow:hover {
+        transform: scale(1.05);
+      }
+
+      .nav-arrow:active {
+        transform: scale(0.95);
+      }
+
+      #prev {
+        left: 18px;
+      }
+
+      #next {
+        right: 18px;
+      }
+
+      .page-counter {
+        bottom: 18px;
+      }
+
+      .book-spine {
+        display: none;
+      }
+    }
+
   </style>
 </head>
+
 
 <body>
 
   <div class="viewer">
 
-    <div id="book">
+    <div class="book-wrapper">
 
-      <div class="page">
-        <img src="1.jpg" alt="Page 1">
+      <div id="book">
+
+        <div class="page"><img src="1.jpg" alt="Page 1"></div>
+        <div class="page"><img src="2.jpg" alt="Page 2"></div>
+        <div class="page"><img src="3.jpg" alt="Page 3"></div>
+        <div class="page"><img src="4.jpg" alt="Page 4"></div>
+        <div class="page"><img src="5.jpg" alt="Page 5"></div>
+        <div class="page"><img src="6.jpg" alt="Page 6"></div>
+        <div class="page"><img src="7.jpg" alt="Page 7"></div>
+        <div class="page"><img src="8.jpg" alt="Page 8"></div>
+        <div class="page"><img src="9.jpg" alt="Page 9"></div>
+        <div class="page"><img src="10.jpg" alt="Page 10"></div>
+        <div class="page"><img src="11.jpg" alt="Page 11"></div>
+        <div class="page"><img src="12.jpg" alt="Page 12"></div>
+        <div class="page"><img src="13.jpg" alt="Page 13"></div>
+        <div class="page"><img src="14.jpg" alt="Page 14"></div>
+        <div class="page"><img src="15.jpg" alt="Page 15"></div>
+        <div class="page"><img src="16.jpg" alt="Page 16"></div>
+        <div class="page"><img src="17.jpg" alt="Page 17"></div>
+        <div class="page"><img src="18.jpg" alt="Page 18"></div>
+        <div class="page"><img src="19.jpg" alt="Page 19"></div>
+        <div class="page"><img src="20.jpg" alt="Page 20"></div>
+        <div class="page"><img src="21.jpg" alt="Page 21"></div>
+        <div class="page"><img src="22.jpg" alt="Page 22"></div>
+        <div class="page"><img src="23.jpg" alt="Page 23"></div>
+        <div class="page"><img src="24.jpg" alt="Page 24"></div>
+        <div class="page"><img src="25.jpg" alt="Page 25"></div>
+
       </div>
 
-      <div class="page">
-        <img src="2.jpg" alt="Page 2">
-      </div>
-
-      <div class="page">
-        <img src="3.jpg" alt="Page 3">
-      </div>
-
-      <div class="page">
-        <img src="4.jpg" alt="Page 4">
-      </div>
-
-      <div class="page">
-        <img src="5.jpg" alt="Page 5">
-      </div>
-
-      <div class="page">
-        <img src="6.jpg" alt="Page 6">
-      </div>
-
-      <div class="page">
-        <img src="7.jpg" alt="Page 7">
+      <div
+        id="book-spine"
+        class="book-spine">
       </div>
 
     </div>
 
   </div>
 
-  <div class="controls">
 
-    <button id="prev">‹</button>
+  <!-- LEFT ARROW -->
 
-    <span id="page-number">
-      1 / 7
-    </span>
+  <button
+    id="prev"
+    class="nav-arrow"
+    aria-label="Previous page">
+    ‹
+  </button>
 
-    <button id="next">›</button>
 
+  <!-- RIGHT ARROW -->
+
+  <button
+    id="next"
+    class="nav-arrow"
+    aria-label="Next page">
+    ›
+  </button>
+
+
+  <!-- PAGE COUNTER -->
+
+  <div
+    id="page-counter"
+    class="page-counter">
+    1 / 25
   </div>
+
 
   <script>
 
     const pageFlip = new St.PageFlip(
       document.getElementById("book"),
       {
+
+        /* 11 × 8.5 LANDSCAPE */
+
         width: 1100,
         height: 850,
 
+
+        /* RESPONSIVE BOOK */
+
         size: "stretch",
 
-        minWidth: 440,
+        minWidth: 330,
         maxWidth: 1100,
 
-        minHeight: 340,
+        minHeight: 255,
         maxHeight: 850,
 
-        maxShadowOpacity: 0.5,
+
+        /* FLIP EFFECT */
+
+        maxShadowOpacity: 0.45,
+
+        flippingTime: 700,
+
+        drawShadow: true,
+
+
+        /* BOOK BEHAVIOR */
 
         showCover: true,
 
@@ -160,34 +388,148 @@
 
         autoSize: true,
 
-        mobileScrollSupport: false
+        mobileScrollSupport: false,
+
+        clickEventForward: true,
+
+        useMouseEvents: true
+
       }
     );
+
+
+    /* LOAD ALL 25 PAGES */
 
     pageFlip.loadFromHTML(
       document.querySelectorAll(".page")
     );
 
-    document
-      .getElementById("prev")
-      .addEventListener("click", () => {
+
+    const prevButton =
+      document.getElementById("prev");
+
+    const nextButton =
+      document.getElementById("next");
+
+    const counter =
+      document.getElementById("page-counter");
+
+    const spine =
+      document.getElementById("book-spine");
+
+
+    /* =========================
+       NAVIGATION
+    ========================= */
+
+    prevButton.addEventListener(
+      "click",
+      () => {
         pageFlip.flipPrev();
-      });
+      }
+    );
 
-    document
-      .getElementById("next")
-      .addEventListener("click", () => {
+
+    nextButton.addEventListener(
+      "click",
+      () => {
         pageFlip.flipNext();
-      });
+      }
+    );
 
-    pageFlip.on("flip", (e) => {
 
-      document.getElementById("page-number").innerText =
-        (e.data + 1) +
-        " / " +
+    /* =========================
+       UPDATE VIEW
+    ========================= */
+
+    function updateBookUI(pageIndex) {
+
+      const totalPages =
         pageFlip.getPageCount();
 
-    });
+      const currentPage =
+        pageIndex + 1;
+
+
+      /* PAGE COUNTER */
+
+      counter.innerText =
+        currentPage +
+        " / " +
+        totalPages;
+
+
+      /* CENTER SPINE
+
+         Hide spine on cover.
+         Show it once the book
+         is displaying a spread.
+      */
+
+      if (
+        currentPage > 1 &&
+        window.innerWidth > 768
+      ) {
+        spine.classList.add("visible");
+      }
+      else {
+        spine.classList.remove("visible");
+      }
+
+
+      /* ARROW VISIBILITY */
+
+      if (currentPage <= 1) {
+        prevButton.style.opacity = "0.35";
+      }
+      else {
+        prevButton.style.opacity = "1";
+      }
+
+
+      if (currentPage >= totalPages) {
+        nextButton.style.opacity = "0.35";
+      }
+      else {
+        nextButton.style.opacity = "1";
+      }
+
+    }
+
+
+    /* WHEN PAGE FLIPS */
+
+    pageFlip.on(
+      "flip",
+      (e) => {
+        updateBookUI(e.data);
+      }
+    );
+
+
+    /* INITIAL STATE */
+
+    updateBookUI(0);
+
+
+    /* =========================
+       KEYBOARD NAVIGATION
+    ========================= */
+
+    document.addEventListener(
+      "keydown",
+      (e) => {
+
+        if (e.key === "ArrowLeft") {
+          pageFlip.flipPrev();
+        }
+
+        if (e.key === "ArrowRight") {
+          pageFlip.flipNext();
+        }
+
+      }
+    );
 
   </script>
 
